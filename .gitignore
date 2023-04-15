@@ -1,0 +1,4 @@
+# NPM - Node.Js
+node_modules
+# Composer
+/vendor/
