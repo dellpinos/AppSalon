@@ -2,3 +2,5 @@
 node_modules
 # Composer
 /vendor/
+# Funcionalidades, ideas, etc.
+Notas.md
