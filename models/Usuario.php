@@ -20,7 +20,7 @@ class Usuario extends ActiveRecord
 
     public function __construct($args = []) // Recibe la info de POST
     {
-        $this->id = $args['id'] ?? null; // son los "name" en HTML
+        $this->id = $args['id'] ?? null; // estos atributos son los "name" en HTML
         $this->nombre = $args['nombre'] ?? '';
         $this->apellido = $args['apellido'] ?? '';
         $this->email = $args['email'] ?? '';
@@ -55,6 +55,15 @@ class Usuario extends ActiveRecord
 
         return self::$alertas;
     }
+    public function validarLogin(){
+        if(!$this->email){
+            self::$alertas['error'][] = 'El Email es obligatorio';
+        }
+        if(!$this->password){
+            self::$alertas['error'][] = 'El password es obligatorio';
+        }
+        return self::$alertas;
+    }
 
     // Verifica si ya existe el usuario
     public function existeUsuario() {
@@ -72,5 +81,12 @@ class Usuario extends ActiveRecord
     }
     public function crearToken(){
         $this->token = uniqid();
+    }
+
+    public function comprobarPasswordAndVerificado($password) {
+
+        $resultado = password_verify($password, $this->password);
+
+        debuguear($resultado);
     }
 }

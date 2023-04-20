@@ -116,11 +116,18 @@ class ActiveRecord {
         return array_shift( $resultado ) ;
     }
 
+    // Busca un registro que coincida el valor en la columna indicada
+    public static function where($columna, $valor) {
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE {$columna} = '{$valor}' ";
+        $resultado = self::consultarSQL($query);
+        return array_shift( $resultado ) ;
+    }
+
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT {$limite}";
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return array_shift( $resultado ) ; // esta función es para que solo devuelva el primere resultado
     }
 
     // crea un nuevo registro
@@ -133,7 +140,8 @@ class ActiveRecord {
         $query .= join(', ', array_keys($atributos));
         $query .= " ) VALUES (' "; 
         $query .= join("', '", array_values($atributos));
-        $query .= " ') ";
+        $query .= "') ";
+
 
         // Resultado de la consulta
         $resultado = self::$db->query($query);

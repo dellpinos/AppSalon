@@ -9,8 +9,30 @@ use Model\Usuario;
 class LoginController {
 
     public static function login(Router $router){
-        $router->render('auth/login');
-        echo 'Desde Login';
+        $alertas=[];
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $auth = new Usuario($_POST);
+            $alertas = $auth->validarLogin();
+        }
+
+        if(empty($alertas)){
+            // Comprobar que exista el usuario
+            $usuario = Usuario::where('email', $auth->email);
+
+            if($usuario){
+                // Verificar el password
+                $usuario->comprobarPasswordAndVerificado($auth->password);
+            } else {
+                Usuario::setAlerta('error', 'El usuario no existe');
+            }
+        }
+        $alertas = Usuario::getAlertas();
+
+
+        $router->render('auth/login', [
+            'alertas' => $alertas
+        ]);
     }
     public static function logout(){
         echo 'Desde Logout';
@@ -55,7 +77,9 @@ class LoginController {
                     $email->enviarConfirmacion();
 
                     // Crear el usuario
+
                     $resultado = $usuario->guardar();
+
                     if($resultado){
                         header('Location: /mensaje');
                     }
@@ -75,9 +99,24 @@ class LoginController {
 
         $token = s($_GET['token']);
 
-        debuguear($token);
+
+        $usuario = Usuario::where('token', $token);
+
+        if(empty($usuario)){
+            // Mostrar mensaje de error
+            Usuario::setAlerta('error', 'Token no valido'); // lo agrega en el array
+        } else {
+            // Modificar usuario a confirmado
+            $usuario->confirmado = '1'; // Modifico el atributo en memoria
+            $usuario->token = ''; // borro el token en memoria
+            $usuario->guardar();
+            Usuario::setAlerta('exito', 'Dirección de correo confirmada correctamente');
+        }
 
 
+        $alertas = Usuario::getAlertas(); // leer el array
+
+        // Renderizar la vista
         $router->render('auth/confirmar-cuenta', [
             'alertas' => $alertas
         ]);
