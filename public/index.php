@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+use Controllers\TurnoController;
 use Controllers\LoginController;
 use MVC\Router;
 
@@ -26,6 +27,9 @@ $router->post('/crear-cuenta', [LoginController::class, 'crear']);
 //Confirmar cueenta
 $router->get('/confirmar-cuenta', [LoginController::class, 'confirmar']);
 $router->get('/mensaje', [LoginController::class, 'mensaje']);
+
+// Area Pivada
+$router->get('/turno', [TurnoController::class, 'index']);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
