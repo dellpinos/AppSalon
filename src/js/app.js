@@ -12,6 +12,8 @@ function iniciarApp(){
     botonesPaginador(); // muestra y oculta botones paginador
     paginaSiguiente();
     paginaAnterior();
+    
+    consultarAPI(); // Consulta la API en el Backend de PHP
 }
 function mostrarSeccion(){ // se ejecuta cada vez que hay un listener
     // Ocultar la seccion que tenga la clase mostrar
@@ -79,4 +81,14 @@ function paginaSiguiente(){
         paso++;
         botonesPaginador();
     });
+}
+async function consultarAPI(){
+    try{
+        const url = 'http://127.0.0.1:3000/api/servicios';
+        const resultado = await fetch(url);
+        const servicios = await resultado.json();
+        console.log(servicios);
+    } catch(error){
+        console.log(error);
+    }
 }
