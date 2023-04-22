@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+use Controllers\APIController;
 use Controllers\TurnoController;
 use Controllers\LoginController;
 use MVC\Router;
@@ -30,6 +31,9 @@ $router->get('/mensaje', [LoginController::class, 'mensaje']);
 
 // Area Pivada
 $router->get('/turno', [TurnoController::class, 'index']);
+
+// API de Turnos
+$router->get('/api/servicios', [APIController::class, 'index']);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

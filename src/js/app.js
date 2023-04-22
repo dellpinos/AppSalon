@@ -1,4 +1,6 @@
 let paso = 1; // le doy un valor inicial para que "mostrarSeccion" funcione la primera vez
+const pasoInicial = 1;
+const pasoFinal = 3;
 
 document.addEventListener('DOMContentLoaded', function() {
     iniciarApp();
@@ -7,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function iniciarApp(){
     mostrarSeccion(); // muestra y oculta las secciones
     tabs(); // Cambia la sección cuando cuando se presionan los tabs
+    botonesPaginador(); // muestra y oculta botones paginador
+    paginaSiguiente();
+    paginaAnterior();
 }
 function mostrarSeccion(){ // se ejecuta cada vez que hay un listener
     // Ocultar la seccion que tenga la clase mostrar
@@ -39,6 +44,39 @@ function tabs(){ // solo se ejecuta al iniciar la pagina
             paso = parseInt(e.target.dataset.paso)
 
             mostrarSeccion();
-        })
+            botonesPaginador();
+        });
+    });
+}
+function botonesPaginador(){
+    const paginaAnterior = document.querySelector('#anterior');
+    const paginaSiguiente = document.querySelector('#siguiente');
+
+    if(paso === 1){
+        paginaAnterior.classList.add('ocultar');
+        paginaSiguiente.classList.remove('ocultar');
+    } else if (paso === 3) {
+        paginaAnterior.classList.remove('ocultar');
+        paginaSiguiente.classList.add('ocultar');
+    } else {
+        paginaAnterior.classList.remove('ocultar');
+        paginaSiguiente.classList.remove('ocultar');
+    }
+    mostrarSeccion();
+}
+function paginaAnterior(){
+    const paginaAnterior = document.querySelector('#anterior');
+    paginaAnterior.addEventListener('click', function(){
+        if(paso <= pasoInicial) return;
+        paso--;
+        botonesPaginador();
+    });
+}
+function paginaSiguiente(){
+    const paginaSiguiente = document.querySelector('#siguiente');
+    paginaSiguiente.addEventListener('click', function(){
+        if(paso >= pasoFinal) return;
+        paso++;
+        botonesPaginador();
     });
 }
