@@ -162,7 +162,32 @@ function seleccionarFecha() {
 
         const dia = new Date(e.target.value).getUTCDay();
 
-        if(dia )
+        if( [0, 6].includes(dia) ) {
+            e.target.value = '';
+            mostrarAlerta('Solo de Lunes a Viernes', 'error');
+        } else {
+            turno.fecha = e.target.value;
+        }
         console.log(dia);
     });
+}
+function mostrarAlerta(mensaje, tipo) {
+    
+    // Previene que se genere más de una alerta
+    const alertaPrevia = document.querySelector('.alerta');
+    if(alertaPrevia) return;
+
+    // Scripting para generar la alerta
+    const alerta = document.createElement('DIV');
+    alerta.textContent = mensaje;
+    alerta.classList.add('alerta');
+    alerta.classList.add(tipo);
+
+    const formulario = document.querySelector('.formulario');
+    formulario.appendChild(alerta);
+
+    // Eliminar la alerta
+    setTimeout(() => {
+        alerta.remove();
+    }, 2000);
 }
