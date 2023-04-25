@@ -24,7 +24,7 @@
             </div>
             <div class="campo">
                 <label for="fecha">Fecha: </label>
-                <input type="date" id="fecha"/>
+                <input type="date" id="fecha" min="<?php echo date('Y-m-d', strtotime('+2 day')) ?>" />
             </div>
             <div class="campo">
                 <label for="hora">Hora: </label>
@@ -32,7 +32,7 @@
             </div>
         </form>
     </div>
-    <div class="seccion" id="paso-3">
+    <div class="seccion contenido-resumen" id="paso-3">
         <h2>Resumen</h2>
         <p class="text-center" >Verifica que la información sea correcta</p>
     </div>

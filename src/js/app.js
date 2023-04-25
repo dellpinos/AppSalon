@@ -24,6 +24,9 @@ function iniciarApp() {
 
     nombreCliente(); // Almacena el nombre del cliente en el objeto Turno
     seleccionarFecha(); // Almacena la fecha del turno en el objeto
+    seleccionarHora(); // Almacena la hora del turno en el objeto
+
+    mostrarResumen(); // Muestra el resumen del turno
 }
 function mostrarSeccion() { // se ejecuta cada vez que hay un listener
     // Ocultar la seccion que tenga la clase mostrar
@@ -57,6 +60,7 @@ function tabs() { // solo se ejecuta al iniciar la pagina
 
             mostrarSeccion();
             botonesPaginador();
+
         });
     });
 }
@@ -70,6 +74,8 @@ function botonesPaginador() {
     } else if (paso === 3) {
         paginaAnterior.classList.remove('ocultar');
         paginaSiguiente.classList.add('ocultar');
+
+        mostrarResumen(); // Validar
     } else {
         paginaAnterior.classList.remove('ocultar');
         paginaSiguiente.classList.remove('ocultar');
@@ -119,7 +125,7 @@ function mostrarServicios(servicios) {
         const servicioDiv = document.createElement('DIV');
         servicioDiv.classList.add('servicio');
         servicioDiv.dataset.idServicio = id; // el elemento, el metodo atributo, el nombre del atributo = asigno valor al atributo
-        servicioDiv.onclick = function(){
+        servicioDiv.onclick = function () {
             seleccionarServicio(servicio);
         }
 
@@ -132,62 +138,92 @@ function mostrarServicios(servicios) {
 }
 
 function seleccionarServicio(servicio) {
-    const {id} = servicio;
-    const {servicios} = turno; // destructuring, extraigo el array "servicios" contenido dentro del objeto "turno" y creo la variable/objeto servicios
-    
+    const { id } = servicio;
+    const { servicios } = turno; // destructuring, extraigo el array "servicios" contenido dentro del objeto "turno" y creo la variable/objeto servicios
+
     // Identificar el elemento que recibe el click
     const divServicio = document.querySelector(`[data-id-servicio= "${id}"]`);
     // Comprobar si un servicio ya fue agregado o quitarlo
-    if(servicios.some(agregado => agregado.id === id)) {
+    if (servicios.some(agregado => agregado.id === id)) {
         // Eliminarlo
-        turno.servicios = servicios.filter( agregado => agregado.id !== id); // array method que crea un nuevo array con los elementos que cumplan cierta condicion
+        turno.servicios = servicios.filter(agregado => agregado.id !== id); // array method que crea un nuevo array con los elementos que cumplan cierta condicion
         divServicio.classList.remove('seleccionado');
     } else {
         // Agregarlo
         turno.servicios = [...servicios, servicio]; // spread operator hago una copia de "servicios" y le agrego "servicio", de esta forma si presiono en varios botones se van a ir sumando al objeto
         divServicio.classList.add('seleccionado');
     }
-    
+
     console.log(turno);
 }
 
-function nombreCliente(){
+function nombreCliente() {
     const nombre = document.querySelector('#nombre').value;
     turno.nombre = nombre;
 }
 function seleccionarFecha() {
     const inputFecha = document.querySelector('#fecha');
-    inputFecha.addEventListener('input', function(e){
+    inputFecha.addEventListener('input', function (e) {
         console.log(e.target.value);
 
         const dia = new Date(e.target.value).getUTCDay();
 
-        if( [0, 6].includes(dia) ) {
+        if ([0, 6].includes(dia)) {
             e.target.value = '';
-            mostrarAlerta('Solo de Lunes a Viernes', 'error');
+            mostrarAlerta('Solo de Lunes a Viernes', 'error', '.formulario');
         } else {
             turno.fecha = e.target.value;
         }
         console.log(dia);
     });
 }
-function mostrarAlerta(mensaje, tipo) {
-    
+function seleccionarHora() {
+    const inputHora = document.querySelector('#hora');
+    inputHora.addEventListener('input', function (e) {
+
+        const hora = e.target.value.split(':')[0];
+        if (hora < 9 || hora > 19) {
+            e.target.value = '';
+            mostrarAlerta('Horario no valido', 'error', '.formulario');
+        } else {
+            turno.hora = e.target.value;
+        }
+    });
+}
+function mostrarResumen() {
+    const resumen = document.querySelector('.contenido-resumen');
+
+
+    if (Object.values(turno).includes('') || turno.servicios.length < 1) {
+        mostrarAlerta('Todos los campos son obligatorios (servicio/s, fecha y hora)', 'error', '.contenido-resumen', false);
+    } else {
+        console.log('Completado correctamente');
+    }
+}
+
+
+function mostrarAlerta(mensaje, tipo, elemento, tiempo = true) {
+
     // Previene que se genere más de una alerta
     const alertaPrevia = document.querySelector('.alerta');
-    if(alertaPrevia) return;
-
+    if (alertaPrevia) {
+        alertaPrevia.remove();
+    }
     // Scripting para generar la alerta
     const alerta = document.createElement('DIV');
     alerta.textContent = mensaje;
     alerta.classList.add('alerta');
     alerta.classList.add(tipo);
 
-    const formulario = document.querySelector('.formulario');
-    formulario.appendChild(alerta);
+    const referencia = document.querySelector(elemento);
+    referencia.appendChild(alerta);
 
-    // Eliminar la alerta
-    setTimeout(() => {
-        alerta.remove();
-    }, 2000);
+    if (tiempo) {
+        // Eliminar la alerta
+        setTimeout(() => {
+            alerta.remove();
+        }, 2000);
+    }
+
 }
+
