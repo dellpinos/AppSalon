@@ -154,7 +154,7 @@ function seleccionarServicio(servicio) {
         divServicio.classList.add('seleccionado');
     }
 
-    console.log(turno);
+
 }
 
 function nombreCliente() {
@@ -174,7 +174,6 @@ function seleccionarFecha() {
         } else {
             turno.fecha = e.target.value;
         }
-        console.log(dia);
     });
 }
 function seleccionarHora() {
@@ -194,29 +193,25 @@ function mostrarResumen() {
     const resumen = document.querySelector('.contenido-resumen');
 
     // Limpiar el contenido de resumen
-    while(resumen.firstChild) {
+    while (resumen.firstChild) {
         resumen.removeChild(resumen.firstChild);
     }
 
     if (Object.values(turno).includes('') || turno.servicios.length < 1) {
         mostrarAlerta('Todos los campos son obligatorios (servicio/s, fecha y hora)', 'error', '.contenido-resumen', false);
-        
+
         return;
     }
+    const { nombre, fecha, hora, servicios } = turno;
 
-    // Scripting <div> Resumen
-    const { nombre, fecha, hora, servicios} = turno;
-    const nombreCliente = document.createElement('P');
-    nombreCliente.innerHTML = `<span>Nombre:</span> ${nombre}`;
+    // Headin para Resumen
+    const headingServicios = document.createElement('H3');
+    headingServicios.textContent = 'Resumen de Servicios';
+    resumen.appendChild(headingServicios);
 
-    const fechaTurno = document.createElement('P');
-    fechaTurno.innerHTML = `<span>Fecha:</span> ${fecha}`;
-
-    const horaTurno = document.createElement('P');
-    horaTurno.innerHTML = `<span>Hora:</span> ${hora}`;
-
+    // Iterando e imprimiendo en pantalla los servicios
     servicios.forEach(servicio => {
-        const {id, precio, nombre} = servicio;
+        const { id, precio, nombre } = servicio;
         const contenedorServicio = document.createElement('DIV');
         contenedorServicio.classList.add('contenedor-servicio');
 
@@ -232,12 +227,57 @@ function mostrarResumen() {
         resumen.appendChild(contenedorServicio);
     });
 
+    // Scripting <div> Resumen
+    // Headin para Resumen
+    const headingTurno = document.createElement('H3');
+    headingTurno.textContent = 'Resumen del Turno';
+    resumen.appendChild(headingTurno);
+
+    const nombreCliente = document.createElement('P');
+    nombreCliente.innerHTML = `<span>Nombre:</span> ${nombre}`;
+
+    // Formatear fecha del turno
+    const fechaObj = new Date(fecha);
+    const mes = fechaObj.getMonth();
+    const dia = fechaObj.getDate() + 2;
+    const year = fechaObj.getFullYear();
+
+    const fechaUTC = new Date(Date.UTC(year, mes, dia));
+    const opciones = { 
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+
+    const fechaFormateada = fechaUTC.toLocaleDateString('es-AR', opciones);
+
+    console.log(fechaFormateada);
+
+
+    const fechaTurno = document.createElement('P');
+    fechaTurno.innerHTML = `<span>Fecha:</span> ${fechaFormateada}`;
+
+    const horaTurno = document.createElement('P');
+    horaTurno.innerHTML = `<span>Hora:</span> ${hora} hs`;
+
+    // Boton para crear un turno
+
+    const botonReservar = document.createElement('BUTTON');
+    botonReservar.classList.add('boton');
+    botonReservar.textContent = 'Reservar Turno';
+    botonReservar.onclick = reservarTurno; // el funcion que se ejecuta en respuesta al evento no lleva parametros (). Si no debo escribir un callback con function() {}
+
     resumen.appendChild(nombreCliente);
     resumen.appendChild(fechaTurno);
     resumen.appendChild(horaTurno);
 
-    console.log(nombreCliente);
-    
+    resumen.appendChild(botonReservar);
+
+}
+
+function reservarTurno() {
+    console.log('Reservando turno....') // construir peticion a la API
 }
 
 
