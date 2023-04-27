@@ -254,7 +254,6 @@ function mostrarResumen() {
 
     console.log(fechaFormateada);
 
-
     const fechaTurno = document.createElement('P');
     fechaTurno.innerHTML = `<span>Fecha:</span> ${fechaFormateada}`;
 
@@ -275,11 +274,6 @@ function mostrarResumen() {
     resumen.appendChild(botonReservar);
 
 }
-
-function reservarTurno() {
-    console.log('Reservando turno....') // construir peticion a la API
-}
-
 
 function mostrarAlerta(mensaje, tipo, elemento, tiempo = true) {
 
@@ -305,3 +299,24 @@ function mostrarAlerta(mensaje, tipo, elemento, tiempo = true) {
     }
 }
 
+async function reservarTurno() {
+
+    const datos = new FormData();
+    datos.append('nombre', 'Martin');
+
+    // Peticion hacia la API
+    const url = 'http://127.0.0.1:3000/api/turnos';
+    const respuesta = await fetch(url, {
+        method: 'POST',
+        body: datos
+    });
+
+    const resultado = await respuesta.json();
+
+    console.log(resultado);
+
+    console.log(respuesta);
+}
+
+
+// console.log([...datos]);

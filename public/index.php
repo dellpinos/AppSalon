@@ -34,6 +34,9 @@ $router->get('/turno', [TurnoController::class, 'index']);
 
 // API de Turnos
 $router->get('/api/servicios', [APIController::class, 'index']);
+$router->post('/api/turnos', [APIController::class, 'guardar']);
+
+
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
