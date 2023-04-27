@@ -299,10 +299,22 @@ function mostrarAlerta(mensaje, tipo, elemento, tiempo = true) {
     }
 }
 
+
 async function reservarTurno() {
 
+    const { nombre, fecha, hora, servicios } = turno;
+
+    const idServicios = servicios.map(servicio => servicio.id );
+
     const datos = new FormData();
-    datos.append('nombre', 'Martin');
+    datos.append('nombre', nombre);
+    datos.append('fecha', fecha);
+    datos.append('hora', hora);
+    datos.append('servicios', idServicios);
+
+    
+
+    
 
     // Peticion hacia la API
     const url = 'http://127.0.0.1:3000/api/turnos';
@@ -319,4 +331,3 @@ async function reservarTurno() {
 }
 
 
-// console.log([...datos]);
