@@ -10,7 +10,8 @@ class TurnoController {
 //        session_start(); <<<<<<< Ya tengo iniciada la sesion, esto provoca un error Notice
 
         $router->render('turno/index', [
-            'nombre' => $_SESSION['nombre']
+            'nombre' => $_SESSION['nombre'],
+            'id' => $_SESSION['id']
         ]);
     }
 }

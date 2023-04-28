@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Model\Servicio;
+use Model\Turno;
 
 class APIController {
     public static function index(){
@@ -11,10 +12,16 @@ class APIController {
 
     }
     public static function guardar(){
-        $respuesta = [ // un array asociativo en PHP es el equivalente a un objeto en Js
-            'datos' => $_POST,
-        ];
-        echo json_encode($respuesta);
 
+        $turno = new Turno($_POST);
+
+        $resultado = $turno->guardar();
+
+        $respuesta = [
+            'resultado' => $resultado
+        ];
+
+        echo json_encode($respuesta);
+        
     }
 }

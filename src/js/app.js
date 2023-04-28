@@ -3,6 +3,7 @@ const pasoInicial = 1;
 const pasoFinal = 3;
 
 const turno = { // por default los objetos en js funcionan como "let" pueden ser modificados durante la ejecución
+    id: '',
     nombre: '',
     fecha: '',
     hora: '',
@@ -22,6 +23,7 @@ function iniciarApp() {
 
     consultarAPI(); // Consulta la API en el Backend de PHP
 
+    idCliente(); // 
     nombreCliente(); // Almacena el nombre del cliente en el objeto Turno
     seleccionarFecha(); // Almacena la fecha del turno en el objeto
     seleccionarHora(); // Almacena la hora del turno en el objeto
@@ -154,7 +156,11 @@ function seleccionarServicio(servicio) {
         divServicio.classList.add('seleccionado');
     }
 
+}
 
+function idCliente() {
+    const id = document.querySelector('#id').value;
+    turno.id = id;
 }
 
 function nombreCliente() {
@@ -243,7 +249,7 @@ function mostrarResumen() {
     const year = fechaObj.getFullYear();
 
     const fechaUTC = new Date(Date.UTC(year, mes, dia));
-    const opciones = { 
+    const opciones = {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -302,32 +308,48 @@ function mostrarAlerta(mensaje, tipo, elemento, tiempo = true) {
 
 async function reservarTurno() {
 
-    const { nombre, fecha, hora, servicios } = turno;
+    const { id, fecha, hora, servicios } = turno;
 
-    const idServicios = servicios.map(servicio => servicio.id );
+    const idServicios = servicios.map(servicio => servicio.id);
 
     const datos = new FormData();
-    datos.append('nombre', nombre);
+    datos.append('usuarioId', id);
     datos.append('fecha', fecha);
     datos.append('hora', hora);
     datos.append('servicios', idServicios);
 
-    
+    try {
+        // Peticion hacia la API
+        const url = 'http://127.0.0.1:3000/api/turnos';
+        const respuesta = await fetch(url, {
+            method: 'POST',
+            body: datos
+        });
 
-    
+        const resultado = await respuesta.json();
 
-    // Peticion hacia la API
-    const url = 'http://127.0.0.1:3000/api/turnos';
-    const respuesta = await fetch(url, {
-        method: 'POST',
-        body: datos
-    });
+        if (resultado.resultado) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Turno Creado',
+                text: 'Ya reservaste un Turno :)'
+            }).then(() => {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Hubo un error al almacenar el turno'
+          })
+    }
 
-    const resultado = await respuesta.json();
 
-    console.log(resultado);
 
-    console.log(respuesta);
+
 }
 
 
