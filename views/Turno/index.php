@@ -1,6 +1,9 @@
 <h1 class="nombre-pagina">Pedir un turno nuevo</h1>
-
 <p class="descripcion-pagina">Elije tus servicios y coloca tus datos</p>
+
+<div class="barra">
+    <p>Hola: <?php echo $nombre ?? ''; ?></p>
+</div>
 
 <div id="app">
     <nav class="tabs">

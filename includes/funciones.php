@@ -1,5 +1,6 @@
 <?php
 
+// Desarrollo
 function debuguear($variable) : string {
     echo "<pre>";
     var_dump($variable);
@@ -11,4 +12,11 @@ function debuguear($variable) : string {
 function s($html) : string {
     $s = htmlspecialchars($html);
     return $s;
+}
+
+// Verificar usuario autenticado
+function isAuth() : void { 
+    if(!isset($_SESSION['login'])) {
+        header('Location: /');
+    }
 }

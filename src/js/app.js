@@ -336,7 +336,7 @@ async function reservarTurno() {
             }).then(() => {
                 setTimeout(() => {
                     window.location.reload();
-                }, 3000);
+                }, 1000);
             });
         }
     } catch (error) {
@@ -346,10 +346,6 @@ async function reservarTurno() {
             text: 'Hubo un error al almacenar el turno'
           })
     }
-
-
-
-
 }
 
 
