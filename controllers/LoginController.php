@@ -31,18 +31,13 @@ class LoginController {
                         $_SESSION['login'] = true;
 
                         // Redireccionamiento
-
                         if($usuario->admin === "1"){
                             $_SESSION['admin'] = $usuario->admin ?? null;
-
                             header('Location: /admin');
                         } else {
                             header('Location: /turno');
                         }
-
-                        debuguear($_SESSION);
                     }
-                    
                 } else {
                     Usuario::setAlerta('error', 'El usuario no existe');
                 }
@@ -126,8 +121,6 @@ class LoginController {
             }
 
         }
-
-
         $alertas = Usuario::getAlertas();
         $router->render('auth/recuperar-password', [
             'alertas' => $alertas,
@@ -166,7 +159,6 @@ class LoginController {
                     $email->enviarConfirmacion();
 
                     // Crear el usuario
-
                     $resultado = $usuario->guardar();
 
                     if($resultado){

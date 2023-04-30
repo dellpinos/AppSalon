@@ -5,6 +5,7 @@ require_once __DIR__ . '/../includes/app.php';
 use Controllers\APIController;
 use Controllers\TurnoController;
 use Controllers\LoginController;
+use Controllers\AdminController;
 use MVC\Router;
 
 $router = new Router();
@@ -29,14 +30,14 @@ $router->post('/crear-cuenta', [LoginController::class, 'crear']);
 $router->get('/confirmar-cuenta', [LoginController::class, 'confirmar']);
 $router->get('/mensaje', [LoginController::class, 'mensaje']);
 
-// Area Pivada
+// Area Pivada - cliente
 $router->get('/turno', [TurnoController::class, 'index']);
+// Area Privada - admin
+$router->get('/admin', [AdminController::class, 'index']);
 
 // API de Turnos
 $router->get('/api/servicios', [APIController::class, 'index']);
 $router->post('/api/turnos', [APIController::class, 'guardar']);
-
-
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
