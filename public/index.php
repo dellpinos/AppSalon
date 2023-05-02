@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+use Controllers\ServicioController;
 use Controllers\APIController;
 use Controllers\TurnoController;
 use Controllers\LoginController;
@@ -10,8 +11,8 @@ use MVC\Router;
 
 $router = new Router();
 
-// Inicia sesion
 
+// Inicia sesion
 $router->get('/', [LoginController::class, 'login']);
 $router->post('/', [LoginController::class, 'login']);
 $router->get('/logout', [LoginController::class, 'logout']);
@@ -40,6 +41,13 @@ $router->get('/api/servicios', [APIController::class, 'index']);
 $router->post('/api/turnos', [APIController::class, 'guardar']);
 $router->post('/api/eliminar', [APIController::class, 'eliminar']);
 
+// CRUD Servicios
+$router->get('/servicios', [ServicioController::class, 'index']);
+$router->get('/servicios/crear', [ServicioController::class, 'crear']);
+$router->post('/servicios/crear', [ServicioController::class, 'crear']);
+$router->get('/servicios/actualizar', [ServicioController::class, 'actualizar']);
+$router->post('/servicios/actualizar', [ServicioController::class, 'actualizar']);
+$router->post('/servicios/eliminar', [ServicioController::class, 'eliminar']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

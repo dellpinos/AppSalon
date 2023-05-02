@@ -5,11 +5,13 @@
 
 <?php
 
-debuguear($_SESSION);
 
+if(isset($_SESSION['admin'])) { ?>
 
-if(isset($_SESSION['admin'])) {
-    echo "Si es Admin";
-} else {
-    echo "No es admin";
-}
+    <div class="barra-servicios">
+        <a class="boton" href="/admin">Ver Turnos</a>
+        <a class="boton" href="/servicios">Ver Servicios</a>
+        <a class="boton" href="/servicios/crear">Nuevo servicio</a>
+    </div>
+
+<?php } ?>
