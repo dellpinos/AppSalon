@@ -7,10 +7,16 @@
     <form class="formulario">
         <div class="campo">
             <label for="fecha">Fecha</label>
-            <input id="fecha" type="date" name="fecha">
+            <input id="fecha" type="date" name="fecha" value="<?php echo $fecha; ?>">
         </div>
     </form>
 </div>
+
+<?php 
+    if(count($turnos) === 0){
+        echo "<h2> No hay turnos programados en esta fecha. </h2>";
+    }
+?>
 
 <div id="turnos-admin">
     <ul class="turnos">
@@ -18,6 +24,7 @@
         $idTurno = '';
         foreach ($turnos as $key => $turno) {
             if ($idTurno !== $turno->id) {
+                $total = 0;
         ?>
                 <li>
                     <p>ID: <span><?php echo $turno->id ?></span></p>
@@ -31,12 +38,27 @@
                 <?php $idTurno = $turno->id;
             }  // Fin de if 
                 ?>
-                    <p class="servicio"><?php echo $turno->servicio . " " . $turno->precio;?></p>
+                    <p class="servicio"><?php echo $turno->servicio . " $ " . $turno->precio;?></p>
                 <?php
+                $total += $turno->precio;
                 $actual = $turno->id;
-                $proximo = $turnos[$key + 1]->id;    
-                ?>
+                $proximo = $turnos[$key + 1]->id ?? 0;
+
+                if(esUltimo($actual, $proximo)) {
+                    ?> <p class="total" >Total a pagar: <span> $<?php echo $total; ?> </span></p> 
+
+
+                    <form action="/api/eliminar" method="POST">
+                        <input type="hidden" name="id" value="<?php echo $turno->id ?>">
+                        <input type="submit" class="boton-eliminar" value="Eliminar">
+                    </form>
+                    
+                <?php }  ?>
             <?php } // Fin de forEach 
             ?>
     </ul>
 </div>
+<?php
+    $script = "<script src='build/js/buscador.js'></script>";
+
+?>

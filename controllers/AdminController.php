@@ -11,6 +11,16 @@ class AdminController {
     public static function index(Router $router) {
         // session_start();
 
+        isAdmin();
+
+        $fecha = $_GET['fecha'] ?? Date('Y-m-d');
+
+        $fechas = explode('-', $fecha);
+        
+        if(!$fechas = checkdate($fechas[1], $fechas[2], $fechas[0])) {
+            header('Location: /404');
+        }
+
 
         // Consultar DB
         $query = "SELECT turnos.id, turnos.hora, CONCAT(usuarios.nombre, \" \" ,usuarios.apellido) AS cliente, ";
@@ -22,7 +32,7 @@ class AdminController {
         $query .= " ON turnosServicios.turnoId=turnos.id ";
         $query .= " LEFT OUTER JOIN servicios ";
         $query .= " ON turnosServicios.servicioId=servicios.id ";
-//        $query .= " WHERE fecha = '{$fecha}' ;";
+        $query .= " WHERE fecha = '{$fecha}' ;";
 
 
         $turnos = AdminTurno::SQL($query);
@@ -30,7 +40,8 @@ class AdminController {
 
         $router->render('admin/index', [
             'nombre' => $_SESSION['nombre'],
-            'turnos' => $turnos
+            'turnos' => $turnos,
+            'fecha' => $fecha
         ]);
     }
 

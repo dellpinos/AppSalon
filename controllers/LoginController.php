@@ -30,6 +30,8 @@ class LoginController {
                         $_SESSION['email'] = $usuario->email;
                         $_SESSION['login'] = true;
 
+                        debuguear($_SESSION);
+
                         // Redireccionamiento
                         if($usuario->admin === "1"){
                             $_SESSION['admin'] = $usuario->admin ?? null;
