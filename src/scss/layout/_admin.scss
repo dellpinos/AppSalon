@@ -15,8 +15,20 @@
         .servicio {
             font-weight: v.$regular;
             color: v.$blanco;
-            
         }
         
+    }
+}
+
+.servicios {
+    @extend .turnos;
+
+    .acciones {
+        margin: 0;
+
+    }
+    .boton,
+    .boton-eliminar {
+        margin: 0;
     }
 }

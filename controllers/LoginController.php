@@ -33,7 +33,7 @@ class LoginController {
 
                         // Redireccionamiento
                         if($usuario->admin === "1"){
-                            $_SESSION['admin'] = $usuario->admin ?? null; // <<<<<<<<<<<
+                            $_SESSION['admin'] = $usuario->admin ?? null;
                             header('Location: /admin');
                         } else {
                             header('Location: /turno');
@@ -108,8 +108,8 @@ class LoginController {
             $alertas = $password->validarPassword();
 
             if(empty($alertas)){
-                $usuario->password = null;
 
+                $usuario->password = null;
                 $usuario->password = $password->password;
                 $usuario->hashPassword();
                 $usuario->token = null;
