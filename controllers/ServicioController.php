@@ -10,6 +10,7 @@ class ServicioController {
     public static function index(Router $router){
 
         // session_start();
+        isAdmin();
 
         $servicios = Servicio::all();
 
@@ -22,11 +23,11 @@ class ServicioController {
 
     public static function crear(Router $router){
 
+        isAdmin();
 
         $servicio = new Servicio;
         $alertas = [];
     
-
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $servicio->sincronizar($_POST);
             
@@ -37,7 +38,6 @@ class ServicioController {
                 header('Location: /servicios');
             }
         }
-
         $router->render('servicios/crear', [
             'nombre' => $_SESSION['nombre'],
             'servicio' => $servicio,
@@ -48,13 +48,13 @@ class ServicioController {
 
     public static function actualizar(Router $router){
 
-        $id = is_numeric($_GET['id']);
-        if(!$id) return;
+        isAdmin();
 
+        $id = is_numeric($_GET['id']);
+
+        if(!$id) header('Location: /servicios');
 
         $servicio = Servicio::find($_GET['id']);
-
-
         $alertas = [];
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -63,11 +63,9 @@ class ServicioController {
             $alertas = $servicio->validar();
 
             if(empty($alertas)) {
-                $resultado = $servicio->guardar();
+                $servicio->guardar();
+                header('Location: /servicios');
 
-                if($resultado) {
-                    header('Location: /servicios');
-                }
             }
         }
 
@@ -79,11 +77,15 @@ class ServicioController {
 
     }
 
-    public static function eliminar(Router $router){
-        echo 'Desde eliminar';
+    public static function eliminar(){
+
+        isAdmin();
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
+            $id = $_POST['id'];
+            $servicio = Servicio::find($id);
+            $servicio->eliminar();
+            header('Location: /servicios');
         }
 
     }
